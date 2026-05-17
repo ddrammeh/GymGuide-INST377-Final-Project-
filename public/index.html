@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GymGuide — Find Your Exercise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <!-- JS Library 1: Chart.js (used on routines page stats) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- JS Library 2: Toastify for notifications -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">🏋️ GYMGUIDE</a>
+    <div class="nav-links">
+      <a href="/" class="active">Exercises</a>
+      <a href="/routines">My Routines</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-text">
+      <h1 class="hero-title">FIND YOUR<br/><span class="accent">NEXT LIFT.</span></h1>
+      <p class="hero-sub">Browse 1,300+ exercises by muscle group or equipment — instantly.</p>
+    </div>
+    <div class="search-bar">
+      <input id="searchInput" type="text" placeholder="Search exercises (e.g. bench press, squat)..." />
+      <button id="searchBtn">Search</button>
+    </div>
+  </header>
+
+  <!-- FILTERS -->
+  <main class="main-content">
+
+    <section class="filter-section">
+      <h2 class="section-label">Browse by Muscle Group</h2>
+      <div class="muscle-grid">
+        <button class="muscle-btn" data-bodypart="chest">💪 Chest</button>
+        <button class="muscle-btn" data-bodypart="back">🫁 Back</button>
+        <button class="muscle-btn" data-bodypart="upper legs">🦵 Legs</button>
+        <button class="muscle-btn" data-bodypart="upper arms">💪 Arms</button>
+        <button class="muscle-btn" data-bodypart="shoulders">🏋️ Shoulders</button>
+        <button class="muscle-btn" data-bodypart="waist">🧘 Core</button>
+      </div>
+
+      <h2 class="section-label" style="margin-top:2rem;">Filter by Equipment</h2>
+      <div class="equipment-grid">
+        <label class="eq-label"><input type="checkbox" value="dumbbell" class="eq-check"> Dumbbells</label>
+        <label class="eq-label"><input type="checkbox" value="barbell" class="eq-check"> Barbell</label>
+        <label class="eq-label"><input type="checkbox" value="body weight" class="eq-check"> Bodyweight</label>
+        <label class="eq-label"><input type="checkbox" value="cable" class="eq-check"> Cables</label>
+        <label class="eq-label"><input type="checkbox" value="machine" class="eq-check"> Machines</label>
+        <label class="eq-label"><input type="checkbox" value="kettlebell" class="eq-check"> Kettlebell</label>
+      </div>
+      <button id="applyFilters" class="btn-primary">Apply Filters</button>
+      <button id="clearFilters" class="btn-ghost">Clear All</button>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-item">
+        <span class="stat-num" id="statWorkouts">—</span>
+        <span class="stat-label">Workouts this week</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" id="statRoutines">—</span>
+        <span class="stat-label">Saved routines</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" id="statExercises">—</span>
+        <span class="stat-label">Results loaded</span>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <section class="results-section">
+      <div class="results-header" id="resultsHeader" style="display:none;">
+        <span id="resultsTitle">Results</span>
+        <button id="backBtn" class="btn-ghost">← Back</button>
+      </div>
+
+      <div id="loadingState" class="loading-state" style="display:none;">
+        <div class="spinner"></div>
+        <p>Loading exercises...</p>
+      </div>
+
+      <div id="emptyState" class="empty-state">
+        <p>👆 Pick a muscle group or equipment filter to get started.</p>
+      </div>
+
+      <div id="exerciseGrid" class="exercise-grid"></div>
+
+      <div id="paginationControls" class="pagination" style="display:none;">
+        <button id="prevPage" class="btn-ghost">← Prev</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage" class="btn-primary">Next →</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ROUTINE MODAL -->
+  <div id="routineModal" class="modal-overlay" style="display:none;">
+    <div class="modal">
+      <h2>Save to Routine</h2>
+      <p id="modalExerciseName" class="modal-exercise-name"></p>
+
+      <div class="modal-field">
+        <label>Routine Name</label>
+        <input id="routineName" type="text" placeholder="e.g. Push Day, Leg Day..." />
+      </div>
+
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Sets</label>
+          <select id="modalSets">
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Reps</label>
+          <select id="modalReps">
+            <option value="5">5</option><option value="8">8</option>
+            <option value="10" selected>10</option><option value="12">12</option><option value="15">15</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Rest (sec)</label>
+          <select id="modalRest">
+            <option value="30">30s</option><option value="60" selected>60s</option>
+            <option value="90">90s</option><option value="120">2min</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="saveRoutineBtn" class="btn-primary">Save to Routine</button>
+        <button id="closeModal" class="btn-ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

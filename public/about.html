@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GymGuide — About</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">🏋️ GYMGUIDE</a>
+    <div class="nav-links">
+      <a href="/">Exercises</a>
+      <a href="/routines">My Routines</a>
+      <a href="/about" class="active">About</a>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <h1 class="page-title">ABOUT <span class="accent">GYMGUIDE</span></h1>
+    <p class="page-sub">The problem, the solution, and how it all works.</p>
+  </header>
+
+  <main class="main-content about-content">
+
+    <div class="about-block">
+      <div class="about-icon">🎯</div>
+      <div>
+        <h2>The Problem</h2>
+        <p>Gym-goers waste time and feel overwhelmed because fitness information is scattered across YouTube, paywalled apps, and complex forums. When equipment is taken or a routine is forgotten, workouts fall apart. Beginners don't know which exercises target which muscles. Nobody has time for that friction.</p>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-icon">💡</div>
+      <div>
+        <h2>The Solution</h2>
+        <p>GymGuide is a streamlined workout companion that gives you instant exercise recommendations filtered by muscle group and equipment. No ads. No paywalls. No login required. Your routines are saved to the cloud and persist across sessions. Just the information you need to work out effectively in seconds.</p>
+        <ul class="feature-list">
+          <li>✓ Browse 1,300+ exercises by muscle group</li>
+          <li>✓ Filter by available equipment</li>
+          <li>✓ View animated GIFs and step-by-step form instructions</li>
+          <li>✓ Save custom routines for consistent weekly training</li>
+          <li>✓ Log completed workouts and track your week</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-icon">👥</div>
+      <div>
+        <h2>Who This Is For</h2>
+        <ul class="feature-list">
+          <li>Gym beginners learning proper exercise selection</li>
+          <li>College students navigating crowded campus gyms</li>
+          <li>Home workout enthusiasts with limited equipment</li>
+          <li>Busy professionals needing efficient, repeatable routines</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-icon">📊</div>
+      <div>
+        <h2>Data Sources</h2>
+        <p><strong>ExerciseDB API</strong> (via RapidAPI) — 1,300+ exercises with animated GIFs, categorized by muscle group and equipment, with professional form instructions.</p>
+        <p style="margin-top:0.5rem;"><strong>Supabase (PostgreSQL)</strong> — Cloud database storing your saved routines and workout logs.</p>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-icon">⚠️</div>
+      <div>
+        <h2>Limitations</h2>
+        <ul class="feature-list">
+          <li>Exercise GIFs require an internet connection</li>
+          <li>Some niche exercises may not be in the database</li>
+          <li>No user accounts yet — data tied to your browser session ID</li>
+          <li>ExerciseDB free tier limits API requests per day</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <div class="about-icon">🛠️</div>
+      <div>
+        <h2>Built With</h2>
+        <div class="tech-grid">
+          <span class="tech-tag">HTML5</span>
+          <span class="tech-tag">CSS3</span>
+          <span class="tech-tag">Vanilla JavaScript</span>
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">Express.js</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">ExerciseDB API</span>
+          <span class="tech-tag">Chart.js</span>
+          <span class="tech-tag">Toastify</span>
+          <span class="tech-tag">Vercel</span>
+        </div>
+        <p style="margin-top:1rem;">Created by: Dany Drammeh<br/>Project for: INST377 — Dynamic Web Applications, University of Maryland</p>
+      </div>
+    </div>
+
+  </main>
+
+</body>
+</html>

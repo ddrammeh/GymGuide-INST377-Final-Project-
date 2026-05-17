@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GymGuide — My Routines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">🏋️ GYMGUIDE</a>
+    <div class="nav-links">
+      <a href="/">Exercises</a>
+      <a href="/routines" class="active">My Routines</a>
+      <a href="/about">About</a>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <h1 class="page-title">MY WORKOUT <span class="accent">ROUTINES</span></h1>
+    <p class="page-sub">Your saved workouts live here. Log completions to track consistency.</p>
+  </header>
+
+  <main class="main-content">
+
+    <!-- WEEKLY CHART -->
+    <section class="chart-section">
+      <h2 class="section-label">Workout Activity — Last 7 Days</h2>
+      <div class="chart-container">
+        <canvas id="weeklyChart"></canvas>
+      </div>
+    </section>
+
+    <!-- ROUTINES LIST -->
+    <section class="routines-section">
+      <div class="routines-header">
+        <h2 class="section-label">Saved Routines</h2>
+        <a href="/" class="btn-primary">+ Add Exercises</a>
+      </div>
+
+      <div id="routinesLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading routines...</p>
+      </div>
+
+      <div id="routinesEmpty" class="empty-state" style="display:none;">
+        <p>No routines yet. <a href="/">Browse exercises</a> and save them to a routine!</p>
+      </div>
+
+      <div id="routinesList"></div>
+    </section>
+
+  </main>
+
+  <script src="routines.js"></script>
+</body>
+</html>
