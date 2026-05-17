@@ -19,10 +19,9 @@ Users can save exercises into named routines (e.g. "Push Day", "Leg Day"), which
 - Responsive design — works on mobile at the gym
 - No login required (session-based user data)
 
-**Live Deployment:** [Your Vercel URL here]
+**Live Deployment:** https://gym-guide-inst-377-final-project-e8brpw6z6-dany-s-projects2.vercel.app
 
-**GitHub Repository:** [Your GitHub URL here]
-
+**GitHub Repository:** https://github.com/ddrammeh/GymGuide-INST377-Final-Project-
 ---
 
 ## 3. Target Browsers
