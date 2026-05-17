@@ -8,6 +8,17 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express.static(__dirname + '/public'));
+app.get('/style.css', (req, res) => {
+  res.sendFile('style.css', { root: __dirname + '/public' });
+});
+
+app.get('/app.js', (req, res) => {
+  res.sendFile('app.js', { root: __dirname + '/public' });
+});
+
+app.get('/routines.js', (req, res) => {
+  res.sendFile('routines.js', { root: __dirname + '/public' });
+});
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
