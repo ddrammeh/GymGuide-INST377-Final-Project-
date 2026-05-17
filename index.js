@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const supabaseClient = require('@supabase/supabase-js');
 const dotenv = require('dotenv');
 
@@ -7,7 +6,7 @@ const app = express();
 const port = 3000;
 dotenv.config();
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static(__dirname + '/public'));
 
 const supabaseUrl = process.env.SUPABASE_URL;
