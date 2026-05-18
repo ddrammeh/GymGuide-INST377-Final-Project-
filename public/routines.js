@@ -1,65 +1,39 @@
-// ─────────────────────────────────────────────────────
-// GymGuide — routines.js
-// Fetch #1: GET /api/routines  (read from Supabase)
-// Fetch #2: POST /api/logs     (write to Supabase)
-// Fetch #3: GET /api/logs      (read logs for chart)
-// Chart.js: weekly workout bar chart
-// ─────────────────────────────────────────────────────
-
+// get or create a session id
 function getSessionId() {
-  let id = localStorage.getItem('gymguide_session');
+  let id = localStorage.getItem('gymguide_session')
   if (!id) {
-    id = 'sess_' + Math.random().toString(36).slice(2, 11) + Date.now();
-    localStorage.setItem('gymguide_session', id);
+    id = 'sess_' + Math.random().toString(36).slice(2) + Date.now()
+    localStorage.setItem('gymguide_session', id)
   }
-  return id;
-}
-const SESSION_ID = getSessionId();
-
-// ── Toast ─────────────────────────────────────────────
-function showToast(msg, bg = '#e8c547') {
-  Toastify({
-    text: msg,
-    duration: 3000,
-    gravity: 'bottom',
-    position: 'right',
-    style: {
-      background: bg,
-      color: bg === '#e8c547' ? '#000' : '#fff',
-      fontFamily: 'DM Sans, sans-serif',
-      fontSize: '0.9rem',
-      fontWeight: '600',
-      borderRadius: '0',
-      boxShadow: 'none'
-    }
-  }).showToast();
+  return id
 }
 
-// ── FETCH ROUTINES (FETCH CALL #1) ────────────────────
+const SESSION_ID = getSessionId()
+
+// fetch all routines from supabase and display them
 async function loadRoutines() {
-  const loading = document.getElementById('routinesLoading');
-  const empty = document.getElementById('routinesEmpty');
-  const list = document.getElementById('routinesList');
+  const loading = document.getElementById('routinesLoading')
+  const empty = document.getElementById('routinesEmpty')
+  const list = document.getElementById('routinesList')
 
   try {
-    const res = await fetch('/api/routines');
-    if (!res.ok) throw new Error();
-    const routines = await res.json();
+    const res = await fetch('/api/routines')
+    const routines = await res.json()
 
-    loading.style.display = 'none';
+    loading.style.display = 'none'
 
     if (routines.length === 0) {
-      empty.style.display = 'block';
-      return;
+      empty.style.display = 'block'
+      return
     }
 
-    list.innerHTML = routines.map((r, i) => {
-      const exercises = r.routine_exercises || [];
-      const estTime = exercises.length * 7; // rough estimate
-      const created = new Date(r.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    list.innerHTML = routines.map(r => {
+      const exercises = r.routine_exercises || []
+      const created = new Date(r.created_at).toLocaleDateString()
+      const estTime = exercises.length * 7
 
       return `
-        <div class="routine-card" style="animation-delay:${i * 0.06}s">
+        <div class="routine-card">
           <div class="routine-header" onclick="toggleRoutine('routine-${r.id}')">
             <div>
               <div class="routine-name">${r.name}</div>
@@ -79,32 +53,33 @@ async function loadRoutines() {
             </div>
           </div>
           <div class="routine-body" id="routine-${r.id}">
-            ${exercises.length === 0 ? '<p style="color:var(--text-muted);font-size:0.85rem;">No exercises in this routine.</p>' :
-              exercises.map(ex => `
+            ${exercises.length === 0
+              ? '<p style="color:#aaa;font-size:0.85rem;">No exercises in this routine.</p>'
+              : exercises.map(ex => `
                 <div class="exercise-row">
                   <span class="exercise-row-name">${ex.exercise_name || ex.exercise_id}</span>
-                  <span class="exercise-row-meta">${ex.sets} sets × ${ex.reps} reps &nbsp;•&nbsp; ${ex.rest_seconds}s rest</span>
+                  <span class="exercise-row-meta">${ex.sets} sets × ${ex.reps} reps • ${ex.rest_seconds}s rest</span>
                 </div>
               `).join('')
             }
           </div>
         </div>
-      `;
-    }).join('');
+      `
+    }).join('')
 
   } catch (err) {
-    loading.style.display = 'none';
-    list.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:2rem;">Failed to load routines. Check your connection.</p>';
+    loading.style.display = 'none'
+    list.innerHTML = '<p style="color:#aaa;text-align:center;padding:30px;">Could not load routines.</p>'
   }
 }
 
-// ── TOGGLE ROUTINE BODY ───────────────────────────────
+// toggle a routine open or closed
 function toggleRoutine(id) {
-  const body = document.getElementById(id);
-  if (body) body.classList.toggle('open');
+  const body = document.getElementById(id)
+  if (body) body.classList.toggle('open')
 }
 
-// ── LOG WORKOUT (FETCH CALL #2 — POST to Supabase) ───
+// log a completed workout to supabase
 async function logWorkout(routineId, routineName) {
   try {
     const res = await fetch('/api/logs', {
@@ -113,110 +88,92 @@ async function logWorkout(routineId, routineName) {
       body: JSON.stringify({
         session_id: SESSION_ID,
         routine_id: routineId,
-        notes: `Completed ${routineName}`
+        notes: 'Completed ' + routineName
       })
-    });
+    })
 
-    if (!res.ok) throw new Error();
-    showToast(`🔥 "${routineName}" logged! Keep it up!`, '#52c97a');
-    loadWeeklyChart(); // refresh chart
-  } catch {
-    showToast('Failed to log workout. Try again.', '#e05252');
+    if (!res.ok) throw new Error('log failed')
+    alert('Workout logged!')
+    loadWeeklyChart()
+  } catch (err) {
+    alert('Could not log workout. Try again.')
   }
 }
 
-// ── DELETE ROUTINE ────────────────────────────────────
+// delete a routine
 async function deleteRoutine(id) {
-  if (!confirm('Delete this routine?')) return;
+  if (!confirm('Delete this routine?')) return
 
   try {
-    const res = await fetch(`/api/routines/${id}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error();
-    showToast('Routine deleted.', '#888');
-    loadRoutines();
-  } catch {
-    showToast('Failed to delete. Try again.', '#e05252');
+    const res = await fetch(`/api/routines/${id}`, { method: 'DELETE' })
+    if (!res.ok) throw new Error('delete failed')
+    alert('Routine deleted.')
+    loadRoutines()
+  } catch (err) {
+    alert('Could not delete. Try again.')
   }
 }
 
-// ── WEEKLY CHART (FETCH CALL #3 — Chart.js) ──────────
+// load weekly chart using chart.js
 async function loadWeeklyChart() {
   try {
-    const res = await fetch(`/api/logs?session_id=${SESSION_ID}`);
-    if (!res.ok) return;
-    const logs = await res.json();
+    const res = await fetch(`/api/logs?session_id=${SESSION_ID}`)
+    const logs = await res.json()
 
-    // Build last 7 days labels + counts
-    const days = [];
-    const counts = [];
+    const days = []
+    const counts = []
+
     for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const label = d.toLocaleDateString('en-US', { weekday: 'short' });
-      const dayStr = d.toISOString().split('T')[0];
-      const count = logs.filter(log => log.completed_at && log.completed_at.startsWith(dayStr)).length;
-      days.push(label);
-      counts.push(count);
+      const d = new Date()
+      d.setDate(d.getDate() - i)
+      const label = d.toLocaleDateString('en-US', { weekday: 'short' })
+      const dayStr = d.toISOString().split('T')[0]
+      const count = logs.filter(log => log.completed_at && log.completed_at.startsWith(dayStr)).length
+      days.push(label)
+      counts.push(count)
     }
 
-    const ctx = document.getElementById('weeklyChart').getContext('2d');
+    const ctx = document.getElementById('weeklyChart').getContext('2d')
 
-    // Destroy old chart if exists
-    if (window._weeklyChart) window._weeklyChart.destroy();
+    if (window._chart) window._chart.destroy()
 
-    window._weeklyChart = new Chart(ctx, {
+    window._chart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: days,
         datasets: [{
           label: 'Workouts',
           data: counts,
-          backgroundColor: counts.map(c => c > 0 ? 'rgba(232, 197, 71, 0.85)' : 'rgba(42,42,42,0.8)'),
+          backgroundColor: '#e8c547',
           borderWidth: 0,
-          borderRadius: 2
+          borderRadius: 3
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: ctx => `${ctx.parsed.y} workout${ctx.parsed.y !== 1 ? 's' : ''}`
-            },
-            backgroundColor: '#1c1c1c',
-            borderColor: '#2a2a2a',
-            borderWidth: 1,
-            titleColor: '#f0ede8',
-            bodyColor: '#888',
-            titleFont: { family: 'DM Sans' },
-            bodyFont: { family: 'DM Sans' }
-          }
+          legend: { display: false }
         },
         scales: {
           x: {
-            grid: { color: 'rgba(255,255,255,0.04)' },
-            ticks: { color: '#888', font: { family: 'DM Sans', size: 12 } }
+            ticks: { color: '#aaa' },
+            grid: { color: '#333' }
           },
           y: {
             beginAtZero: true,
-            ticks: {
-              stepSize: 1,
-              color: '#888',
-              font: { family: 'DM Sans', size: 12 }
-            },
-            grid: { color: 'rgba(255,255,255,0.04)' }
+            ticks: { stepSize: 1, color: '#aaa' },
+            grid: { color: '#333' }
           }
         }
       }
-    });
+    })
 
   } catch (err) {
-    console.error('Chart load error:', err);
+    console.log('chart error:', err)
   }
 }
 
-// ── INIT ──────────────────────────────────────────────
-loadRoutines();
-loadWeeklyChart();
+// run on page load
+loadRoutines()
+loadWeeklyChart()

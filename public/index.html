@@ -17,7 +17,7 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <a href="/" class="nav-logo">🏋️ GYMGUIDE</a>
+    <a href="/" class="nav-logo"> GYMGUIDE</a>
     <div class="nav-links">
       <a href="/" class="active">Exercises</a>
       <a href="/routines">My Routines</a>
@@ -25,17 +25,17 @@
     </div>
   </nav>
 
-  <!-- HERO -->
-  <header class="hero">
-    <div class="hero-text">
-      <h1 class="hero-title">FIND YOUR<br/><span class="accent">NEXT LIFT.</span></h1>
-      <p class="hero-sub">Browse 1,300+ exercises by muscle group or equipment — instantly.</p>
-    </div>
+  <div class="page-header">
+    <h1> GymGuide — Workout Exercise Library</h1>
+    <p>Browse exercises by muscle group or equipment and save your own routines.</p>
+  </div>
+
+  <div style="padding: 15px 20px;">
     <div class="search-bar">
-      <input id="searchInput" type="text" placeholder="Search exercises (e.g. bench press, squat)..." />
-      <button id="searchBtn">Search</button>
+      <input id="searchInput" type="text" placeholder="Search exercises..." />
+      <button id="searchBtn" class="btn-primary">Search</button>
     </div>
-  </header>
+  </div>
 
   <!-- FILTERS -->
   <main class="main-content">
@@ -43,12 +43,12 @@
     <section class="filter-section">
       <h2 class="section-label">Browse by Muscle Group</h2>
       <div class="muscle-grid">
-        <button class="muscle-btn" data-bodypart="chest">💪 Chest</button>
-        <button class="muscle-btn" data-bodypart="back">🫁 Back</button>
-        <button class="muscle-btn" data-bodypart="upper legs">🦵 Legs</button>
-        <button class="muscle-btn" data-bodypart="upper arms">💪 Arms</button>
-        <button class="muscle-btn" data-bodypart="shoulders">🏋️ Shoulders</button>
-        <button class="muscle-btn" data-bodypart="waist">🧘 Core</button>
+        <button class="muscle-btn" data-bodypart="chest"> Chest</button>
+        <button class="muscle-btn" data-bodypart="back"> Back</button>
+        <button class="muscle-btn" data-bodypart="upper legs"> Legs</button>
+        <button class="muscle-btn" data-bodypart="upper arms"> Arms</button>
+        <button class="muscle-btn" data-bodypart="shoulders"> Shoulders</button>
+        <button class="muscle-btn" data-bodypart="waist"> Core</button>
       </div>
 
       <h2 class="section-label" style="margin-top:2rem;">Filter by Equipment</h2>
@@ -93,7 +93,7 @@
       </div>
 
       <div id="emptyState" class="empty-state">
-        <p>👆 Pick a muscle group or equipment filter to get started.</p>
+        <p> Pick a muscle group or equipment filter to get started.</p>
       </div>
 
       <div id="exerciseGrid" class="exercise-grid"></div>
